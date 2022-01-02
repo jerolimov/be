@@ -1,10 +1,16 @@
+import { Category } from "./categories";
+
+export interface ArtworkImage {
+  id: string;
+  url: string;
+}
+
 export interface Artwork {
   id: number | string;
   slug: string;
   title: string;
-  // Markdown?
+  /** Markdown */
   content: string;
-  image: {
-    url: string;
-  };
+  images: ArtworkImage[];
+  categories: Category[];
 }

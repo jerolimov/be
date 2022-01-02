@@ -11,9 +11,10 @@ import {
   ScrollRestoration,
   useLoaderData
 } from "remix";
+import { gql } from "graphql-request";
 import globalStyles from "~/styles/global.css";
 import Navigation from "~/navigation";
-import { categories } from "~/data/categories.server";
+import { graphcms } from "~/data/graphql.server";
 import { Category } from "~/types/categories";
 
 interface LoaderData {
@@ -28,8 +29,29 @@ export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: globalStyles }];
 }
 
-export const loader: LoaderFunction = ({ params }): LoaderData => {
-  return { categories };
+const query = gql`
+  {
+    categories {
+      id
+      slug
+      title
+      artworks {
+        id
+      }
+    }
+  }
+`;
+
+export const loader: LoaderFunction = async (): Promise<LoaderData> => {
+  const { categories } = await graphcms.request<{ categories: Category[] }>(query);
+  
+  return {
+    categories: categories.map((c => ({
+      ...c,
+      artworks: undefined,
+      count: c.artworks?.length,
+    }))),
+  };
 }
 
 export default function App() {
