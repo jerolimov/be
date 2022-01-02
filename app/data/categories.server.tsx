@@ -1,4 +1,6 @@
-export const categories = [
+import { Category } from "~/types/categories";
+
+export const categories: Category[] = [
   { id: 1, slug: 'aktzeichnung', title: 'Aktzeichnung', count: 5 },
   { id: 2, slug: 'allgemein/aquarelle', title: 'Aquarelle', count: 10 },
   { id: 3, slug: 'fotografie', title: 'Fotografie', count: 10 },
