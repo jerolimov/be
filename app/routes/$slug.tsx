@@ -1,7 +1,9 @@
-import { LoaderFunction, useLoaderData } from "remix";
+import { LoaderFunction, MetaFunction, useLoaderData } from "remix";
 import { gql } from "graphql-request";
 import { graphcms } from "~/data/graphql.server";
 import { Artwork } from "~/types/artworks";
+import ArtworkDetailItem from "~/components/ArtworkDetailItem";
+import getTitle from "~/utils/getTitle";
 
 interface LoaderData {
   artwork: Artwork;
@@ -30,17 +32,13 @@ export const loader: LoaderFunction = async ({ params }): Promise<LoaderData> =>
   return { artwork };
 }
 
+export const meta: MetaFunction = ({ data }: { data: LoaderData }) => {
+  return { title: getTitle(data.artwork.title) };
+};
+
 export default function CatchAll() {
   const data = useLoaderData<LoaderData>();
   return (
-    <div>
-      <h1>{data.artwork.title}</h1>
-      {data.artwork.images?.map((image) => (
-        <div key={image.id}>
-        <img src={image.url} />
-        </div>
-      ))}
-      <div dangerouslySetInnerHTML={{ __html: data.artwork.content }} />
-    </div>
+    <ArtworkDetailItem artwork={data.artwork} />
   )
 }

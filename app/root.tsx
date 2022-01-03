@@ -13,16 +13,17 @@ import {
 } from "remix";
 import { gql } from "graphql-request";
 import globalStyles from "~/styles/global.css";
-import Navigation from "~/navigation";
+import Navigation from "~/components/Navigation";
 import { graphcms } from "~/data/graphql.server";
 import { Category } from "~/types/categories";
+import getTitle from "~/utils/getTitle";
 
 interface LoaderData {
   categories: Category[];
 }
 
 export const meta: MetaFunction = () => {
-  return { title: "BE" };
+  return { title: getTitle() };
 };
 
 export const links: LinksFunction = () => {
@@ -44,11 +45,11 @@ const query = gql`
 
 export const loader: LoaderFunction = async (): Promise<LoaderData> => {
   const { categories } = await graphcms.request<{ categories: Category[] }>(query);
-  
   return {
     categories: categories.map((c => ({
-      ...c,
-      artworks: undefined,
+      id: c.id,
+      slug: c.slug,
+      title: c.title,
       count: c.artworks?.length,
     }))),
   };
@@ -66,7 +67,7 @@ export default function App() {
       </head>
       <body>
         <header>
-          <h1><Link to="/">BE</Link></h1>
+          <h1><Link to="/">{getTitle()}</Link></h1>
           <Navigation categories={data.categories} />
         </header>
         <main>

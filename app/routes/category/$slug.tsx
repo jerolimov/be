@@ -1,7 +1,9 @@
-import { Link, LoaderFunction, useLoaderData } from "remix";
+import { LoaderFunction, MetaFunction, useLoaderData } from "remix";
 import { gql } from "graphql-request";
 import { graphcms } from "~/data/graphql.server";
 import { Category } from "~/types/categories";
+import ArtworkListItem from "~/components/ArtworkListItem";
+import getTitle from "~/utils/getTitle";
 
 interface LoaderData {
   category: Category;
@@ -32,6 +34,10 @@ export const loader: LoaderFunction = async ({ params }): Promise<LoaderData> =>
   return { category };
 }
 
+export const meta: MetaFunction = ({ data }: { data: LoaderData }) => {
+  return { title: getTitle(data.category.title) };
+};
+
 export default function Category() {
   const data = useLoaderData<LoaderData>();
   return (
@@ -39,17 +45,7 @@ export default function Category() {
       <h1>Kategorie: {data.category.title}</h1>
       <div>
         {data.category.artworks?.map(artwork => (
-          <div key={artwork.id}>
-            <Link to={`/${artwork.slug}`}>
-              {artwork.images?.map((image) => (
-                <div key={image.id}>
-                  <img src={image.url} />
-                </div>
-              ))}
-              <h2>{artwork.title}</h2>
-            </Link>
-            <div dangerouslySetInnerHTML={{ __html: artwork.content }} />
-          </div>
+          <ArtworkListItem key={artwork.id} artwork={artwork} />
         ))}
       </div>
     </div>
