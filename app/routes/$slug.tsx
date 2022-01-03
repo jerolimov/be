@@ -42,7 +42,7 @@ export const loader: LoaderFunction = async ({ params }): Promise<LoaderData> =>
 }
 
 export const meta: MetaFunction = ({ data }: { data: LoaderData }) => {
-  return { title: getTitle(data.content.title || data.artwork.title) };
+  return { title: getTitle(data.content?.title || data.artwork?.title) };
 };
 
 export default function CatchAll() {

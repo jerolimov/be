@@ -12,11 +12,11 @@ import {
   useLoaderData
 } from "remix";
 import { gql } from "graphql-request";
-import globalStyles from "~/styles/global.css";
 import Navigation from "~/components/Navigation";
 import { graphcms } from "~/data/graphql.server";
 import { Category } from "~/types/categories";
 import getTitle from "~/utils/getTitle";
+import styles from "~/tailwind.css";
 
 interface LoaderData {
   categories: Category[];
@@ -27,7 +27,7 @@ export const meta: MetaFunction = () => {
 };
 
 export const links: LinksFunction = () => {
-  return [{ rel: "stylesheet", href: globalStyles }];
+  return [{ rel: "stylesheet", href: styles }];
 }
 
 const query = gql`
@@ -58,7 +58,7 @@ export const loader: LoaderFunction = async (): Promise<LoaderData> => {
 export default function App() {
   const data = useLoaderData<LoaderData>();
   return (
-    <html lang="en">
+    <html lang="de">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -66,14 +66,16 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <header>
-          <h1><Link to="/">{getTitle()}</Link></h1>
+        <header className="container mx-auto text-center py-8">
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight">
+            <Link to="/">BE</Link>
+          </h1>
           <Navigation categories={data.categories} />
         </header>
-        <main>
+        <main className="container mx-auto prose prose-slate prose-img:rounded-xl">
           <Outlet />
         </main>
-        <footer>
+        <footer className="container mx-auto prose my-10 pt-5 text-center border-t">
           Alle Bilder Urheberrechtlich geschützt.{' '}
           <Link to="/impressum" prefetch="none">Impressum</Link>
         </footer>
