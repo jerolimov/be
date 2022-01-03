@@ -1,9 +1,14 @@
 import { LoaderFunction, MetaFunction, useLoaderData } from "remix";
 import { gql } from "graphql-request";
+import { marked } from "marked";
 import { graphcms } from "~/data/graphql.server";
 import { Category } from "~/types/categories";
 import ArtworkListItem from "~/components/ArtworkListItem";
 import getTitle from "~/utils/getTitle";
+
+interface QueryData {
+  category: Category
+}
 
 interface LoaderData {
   category: Category;
@@ -30,7 +35,10 @@ const query = gql`
 `;
 
 export const loader: LoaderFunction = async ({ params }): Promise<LoaderData> => {
-  const { category } = await graphcms.request(query, { slug: params.slug });
+  const { category } = await graphcms.request<QueryData>(query, { slug: params.slug });
+  category.artworks?.forEach((artwork) => {
+    artwork.content = marked(artwork.content);
+  })
   return { category };
 }
 

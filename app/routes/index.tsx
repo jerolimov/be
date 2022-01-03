@@ -1,8 +1,13 @@
 import { LoaderFunction, useLoaderData } from "remix";
 import { gql } from "graphql-request";
+import { marked } from "marked";
 import { Artwork } from "~/types/artworks";
 import { graphcms } from "~/data/graphql.server";
 import ArtworkListItem from "~/components/ArtworkListItem";
+
+interface QueryData {
+  artworks: Artwork[];
+}
 
 interface LoaderData {
   artworks: Artwork[];
@@ -24,7 +29,10 @@ const query = gql`
 `;
 
 export const loader: LoaderFunction = async (): Promise<LoaderData> => {
-  const { artworks } = await graphcms.request(query);
+  const { artworks } = await graphcms.request<QueryData>(query);
+  artworks.forEach((artwork) => {
+    artwork.content = marked(artwork.content);
+  })
   return { artworks };
 }
 
