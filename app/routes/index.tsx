@@ -22,7 +22,17 @@ const query = gql`
       content
       images {
         id
-        url
+        url(
+          transformation: {
+            image: {
+              resize: {
+                height: 200,
+                width: 200,
+              }
+            }
+            validateOptions: true
+          }
+        )
       }
     }
   }
