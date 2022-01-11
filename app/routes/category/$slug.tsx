@@ -5,17 +5,29 @@ import { graphcms } from "~/data/graphql.server";
 import { Category } from "~/types/categories";
 import ArtworkListItem from "~/components/ArtworkListItem";
 import getTitle from "~/utils/getTitle";
+import CategoryDropdown from "~/components/CategoryDropdown";
+import ArtworkGrid from "~/components/ArtworkGrid";
 
 interface QueryData {
-  category: Category
+  categories: Category[];
+  category: Category;
 }
 
 interface LoaderData {
+  categories: Category[];
   category: Category;
 }
 
 const query = gql`
   query GetCategory($slug: String!) {
+    categories {
+      id
+      slug
+      title
+      artworks {
+        id
+      }
+    }
     category(where: { slug: $slug }) {
       id
       slug
@@ -45,11 +57,11 @@ const query = gql`
 `;
 
 export const loader: LoaderFunction = async ({ params }): Promise<LoaderData> => {
-  const { category } = await graphcms.request<QueryData>(query, { slug: params.slug });
+  const { categories, category } = await graphcms.request<QueryData>(query, { slug: params.slug });
   category.artworks?.forEach((artwork) => {
     artwork.content = marked(artwork.content);
   })
-  return { category };
+  return { categories, category };
 }
 
 export const meta: MetaFunction = ({ data }: { data: LoaderData }) => {
@@ -60,12 +72,13 @@ export default function Category() {
   const data = useLoaderData<LoaderData>();
   return (
     <div>
-      <h1>Kategorie: {data.category.title}</h1>
+      <CategoryDropdown currentTitle={data.category.title} categories={data.categories} />
       <div>
         {data.category.artworks?.map(artwork => (
           <ArtworkListItem key={artwork.id} artwork={artwork} />
         ))}
       </div>
+      <ArtworkGrid artworks={data.category.artworks} />
     </div>
   )
 }

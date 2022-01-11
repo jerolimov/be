@@ -12,14 +12,12 @@ import {
   useLoaderData
 } from "remix";
 import { gql } from "graphql-request";
-import Navigation from "~/components/Navigation";
 import { graphcms } from "~/data/graphql.server";
-import { Category } from "~/types/categories";
 import getTitle from "~/utils/getTitle";
 import styles from "~/tailwind.css";
 
 interface LoaderData {
-  categories: Category[];
+  // categories: Category[];
 }
 
 export const meta: MetaFunction = () => {
@@ -30,30 +28,30 @@ export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: styles }];
 }
 
-const query = gql`
-  {
-    categories {
-      id
-      slug
-      title
-      artworks {
-        id
-      }
-    }
-  }
-`;
-
-export const loader: LoaderFunction = async (): Promise<LoaderData> => {
-  const { categories } = await graphcms.request<{ categories: Category[] }>(query);
-  return {
-    categories: categories.map((c => ({
-      id: c.id,
-      slug: c.slug,
-      title: c.title,
-      count: c.artworks?.length,
-    }))),
-  };
-}
+// const query = gql`
+//   {
+//     categories {
+//       id
+//       slug
+//       title
+//       artworks {
+//         id
+//       }
+//     }
+//   }
+// `;
+//
+// export const loader: LoaderFunction = async (): Promise<LoaderData> => {
+//   const { categories } = await graphcms.request<{ categories: Category[] }>(query);
+//   return {
+//     categories: categories.map((c => ({
+//       id: c.id,
+//       slug: c.slug,
+//       title: c.title,
+//       count: c.artworks?.length,
+//     }))),
+//   };
+// }
 
 export default function App() {
   const data = useLoaderData<LoaderData>();
@@ -70,7 +68,6 @@ export default function App() {
           <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight">
             <Link to="/">BE</Link>
           </h1>
-          <Navigation categories={data.categories} />
         </header>
         <main className="container mx-auto prose prose-slate prose-img:rounded-xl">
           <Outlet />

@@ -1,58 +1,69 @@
 import { LoaderFunction, useLoaderData } from "remix";
 import { gql } from "graphql-request";
 import { marked } from "marked";
-import { Artwork } from "~/types/artworks";
 import { graphcms } from "~/data/graphql.server";
-import ArtworkListItem from "~/components/ArtworkListItem";
+import ArtworkGrid from "~/components/ArtworkGrid";
+import CategoryDropdown from "~/components/CategoryDropdown";
+import { Artwork } from "~/types/artworks";
+import { Category } from "~/types/categories";
 
 interface QueryData {
+  categories: Category[];
   artworks: Artwork[];
 }
 
 interface LoaderData {
+  categories: Category[];
   artworks: Artwork[];
 }
 
 const query = gql`
-  {
+query {
+  categories {
+    id
+    slug
+    title
     artworks {
       id
-      slug
-      title
-      content
-      images {
-        id
-        url(
-          transformation: {
-            image: {
-              resize: {
-                height: 200,
-                width: 200,
-              }
-            }
-            validateOptions: true
-          }
-        )
-      }
     }
   }
+  artworks {
+    id
+    slug
+    title
+    content
+    images {
+      id
+      url(
+        transformation: {
+          image: {
+            resize: {
+              height: 200,
+              width: 200,
+            }
+          }
+          validateOptions: true
+        }
+      )
+    }
+  }
+}
 `;
 
 export const loader: LoaderFunction = async (): Promise<LoaderData> => {
-  const { artworks } = await graphcms.request<QueryData>(query);
+  const { categories, artworks } = await graphcms.request<QueryData>(query);
   artworks.forEach((artwork) => {
     artwork.content = marked(artwork.content);
   })
-  return { artworks };
+  return { categories, artworks };
 }
 
 export default function Index() {
   const data = useLoaderData<LoaderData>();
   return (
-    <div>
-      {data.artworks.map(artwork => (
-        <ArtworkListItem key={artwork.id} artwork={artwork} />
-      ))}
-    </div>
+    <>
+      <CategoryDropdown currentTitle="Alle Bilder" categories={data.categories} />
+      <ArtworkGrid artworks={data.artworks} />
+    </>
   );
 }
