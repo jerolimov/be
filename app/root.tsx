@@ -3,22 +3,14 @@ import {
   Links,
   LinksFunction,
   LiveReload,
-  LoaderFunction,
   Meta,
   MetaFunction,
   Outlet,
   Scripts,
   ScrollRestoration,
-  useLoaderData
 } from "remix";
-import { gql } from "graphql-request";
-import { graphcms } from "~/data/graphql.server";
 import getTitle from "~/utils/getTitle";
 import styles from "~/tailwind.css";
-
-interface LoaderData {
-  // categories: Category[];
-}
 
 export const meta: MetaFunction = () => {
   return { title: getTitle() };
@@ -28,33 +20,7 @@ export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: styles }];
 }
 
-// const query = gql`
-//   {
-//     categories {
-//       id
-//       slug
-//       title
-//       artworks {
-//         id
-//       }
-//     }
-//   }
-// `;
-//
-// export const loader: LoaderFunction = async (): Promise<LoaderData> => {
-//   const { categories } = await graphcms.request<{ categories: Category[] }>(query);
-//   return {
-//     categories: categories.map((c => ({
-//       id: c.id,
-//       slug: c.slug,
-//       title: c.title,
-//       count: c.artworks?.length,
-//     }))),
-//   };
-// }
-
 export default function App() {
-  const data = useLoaderData<LoaderData>();
   return (
     <html lang="de">
       <head>

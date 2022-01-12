@@ -38,8 +38,9 @@ query {
         transformation: {
           image: {
             resize: {
-              height: 200,
-              width: 200,
+              fit: crop,
+              width: 300,
+              height: 300,
             }
           }
           validateOptions: true
@@ -51,19 +52,19 @@ query {
 `;
 
 export const loader: LoaderFunction = async (): Promise<LoaderData> => {
-  const { categories, artworks } = await graphcms.request<QueryData>(query);
-  artworks.forEach((artwork) => {
+  const data = await graphcms.request<QueryData>(query);
+  data.artworks.forEach((artwork) => {
     artwork.content = marked(artwork.content);
   })
-  return { categories, artworks };
+  return data;
 }
 
 export default function Index() {
   const data = useLoaderData<LoaderData>();
   return (
-    <>
+    <div className="not-prose">
       <CategoryDropdown currentTitle="Alle Bilder" categories={data.categories} />
       <ArtworkGrid artworks={data.artworks} />
-    </>
+    </div>
   );
 }
