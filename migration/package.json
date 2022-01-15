@@ -1,0 +1,8 @@
+{
+  "private": true,
+  "name": "migration",
+  "description": "",
+  "dependencies": {
+    "fast-xml-parser": "^4.0.1"
+  }
+}
