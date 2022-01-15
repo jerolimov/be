@@ -10,26 +10,30 @@ interface CategoryDropdownProps {
 
 export default function CategoryDropdown(props: CategoryDropdownProps) {
   return (
-    <div className="text-center">
-      <Menu as="div" className="relative inline-block text-center">
-        <Menu.Button className="inline-flex items-center px-4 py-2 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500">
-          {props.currentTitle}
-          <ChevronDownIcon className="-mr-1 ml-2 h-5 w-5" aria-hidden="true" />
-        </Menu.Button>
+    <Menu as="div" className="flex flex-col items-center">
+      <Menu.Button
+        className="flex items-center px-4 py-2 font-medium text-gray-700 hover:bg-gray-200">
+        {props.currentTitle}
+        <ChevronDownIcon className="-mr-1 ml-2 h-5 w-5" aria-hidden="true" />
+      </Menu.Button>
 
-        <Transition
-          as="div"
-          enter="transition ease-out duration-100"
-          enterFrom="transform opacity-0 scale-95"
-          enterTo="transform opacity-100 scale-100"
-          leave="transition ease-in duration-75"
-          leaveFrom="transform opacity-100 scale-100"
-          leaveTo="transform opacity-0 scale-95"
-        >
-          <Menu.Items className="origin-top-center absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-            <div className="py-1">
+      <div className="relative">
+        <div className="absolute flex inset-x-0 m-auto justify-center">
+          <Transition
+            as="div"
+            enter="transition ease-out duration-300"
+            enterFrom="transform opacity-0 scale-95"
+            enterTo="transform opacity-100 scale-100"
+            leave="transition ease-in duration-300"
+            leaveFrom="transform opacity-100 scale-100"
+            leaveTo="transform opacity-0 scale-95"
+          >
+            <Menu.Items
+              as="ol"
+              className="py-2 w-56 rounded-md shadow-lg bg-gray-500"
+            >
               {props.categories.map((category) => (
-                <Menu.Item>
+                <Menu.Item as="li">
                   {({ active }) => (
                     <NavLink
                       to={`/category/${category.slug}/`}
@@ -44,10 +48,10 @@ export default function CategoryDropdown(props: CategoryDropdownProps) {
                   )}
                 </Menu.Item>
               ))}
-            </div>
-          </Menu.Items>
-        </Transition>
-      </Menu>
-    </div>
+            </Menu.Items>
+          </Transition>
+        </div>
+      </div>
+    </Menu>
   );
 }
