@@ -18,7 +18,7 @@
     "@heroicons/react": "^1.0.5",
     "@remix-run/react": "^1.1.1",
     "@remix-run/serve": "^1.1.1",
-    "dotenv": "^10.0.0",
+    "dotenv": "^12.0.0",
     "graphql": "^16.2.0",
     "graphql-request": "^3.7.0",
     "marked": "^4.0.8",
