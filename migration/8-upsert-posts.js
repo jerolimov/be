@@ -17,12 +17,6 @@ mutation Upsert($importFilename: String!, $upsert: ArtworkUpsertInput!) {
 }
 `
 
-const graphcms = new GraphQLClient(artworkApi, {
-  headers: {
-    Authorization: `Bearer ${accessToken}`,
-  },
-});
-
 async function main() {
   const filenames = readdirSync('posts').filter((filename) => filename.endsWith('.json'));
   console.log('filenames', filenames);
@@ -40,6 +34,7 @@ async function main() {
       importedAt: new Date(),
       slug: data.slug,
       title: data.title,
+      content: data.content,
       artwork: data.artwork,
       wpPostDate: data.postDate.replace(' ', 'T') + '+00:00',
     };

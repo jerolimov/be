@@ -17,12 +17,6 @@ mutation Upsert($importFilename: String!, $upsert: ContentUpsertInput!) {
 }
 `
 
-const graphcms = new GraphQLClient(contentApi, {
-  headers: {
-    Authorization: `Bearer ${accessToken}`,
-  },
-});
-
 async function main() {
   const filenames = readdirSync('pages').filter((filename) => filename.endsWith('.json'));
   console.log('filenames', filenames);
