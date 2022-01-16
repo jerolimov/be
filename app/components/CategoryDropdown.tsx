@@ -33,7 +33,7 @@ export default function CategoryDropdown(props: CategoryDropdownProps) {
               className="py-2 w-56 rounded-md shadow-lg bg-gray-500"
             >
               {props.categories.map((category) => (
-                <Menu.Item as="li">
+                <Menu.Item key={category.id} as="li">
                   {({ active }) => (
                     <NavLink
                       to={`/category/${category.slug}/`}
