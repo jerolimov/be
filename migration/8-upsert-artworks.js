@@ -2,9 +2,9 @@ const { readdirSync, readFileSync } = require('fs');
 const { gql } = require('graphql-request');
 const { graphcms } = require('./graphql');
 
-const findImageQuery = gql`
+const findAssetByFilenameQuery = gql`
 query FindImage($importFilename: String!) {
-  assets(where: {importFilename: $importFilename}) {
+  assets(where: { importFilename: $importFilename }) {
     id
   }
 }
@@ -45,37 +45,61 @@ function sleep(milliseconds) {
 
 async function main() {
   const filenames = readdirSync('posts').filter((filename) => filename.endsWith('.json'));
-  console.log('filenames', filenames);
+  // console.log('filenames', filenames);
+  console.log(`Will import ${filenames.length} artworks...`);
 
-  for (let i = 0; i < 3 /*filenames.length*/; i++) {
+  for (let i = 0; i < filenames.length; i++) {
+    const logPrefix = `(${i + 1} of ${filenames.length}) `;
     const filename = filenames[i];
-    console.log('import', filename);
+    console.log(`${logPrefix}Import ${filename}...`);
     const fileContent = readFileSync('posts/' + filename);
     // console.log('fileContent', fileContent);
     const artwork = JSON.parse(fileContent);
     console.log('artwork', artwork);
 
-    const connectImages = [];
-    const connectCategories = [];
-    for (let j = 0; j < artwork.images; j++) {
+    const imageIds = [];
+    for (let j = 0; j < artwork.images.length; j++) {
+      const { importFilename } = artwork.images[j];
+      const findRespones = await graphcms.request(findAssetByFilenameQuery, {
+        importFilename,
+      });
+      console.log('findRespones', findRespones);
+      imageIds.push(...findRespones.assets.map(({ id }) => id));
+      sleep(500);
     }
-    for (let j = 0; j < artwork.categories; j++) {
-      connectCategories.push({ slug: artwork.categories[j].slug });
-    }
+    console.log('imageIds', imageIds);
 
-    const data = {
+    const createData = {
       ...artwork,
-      images: { connect: connectImages },
-      categories: { connect: connectCategories },
+      images: {
+        connect: imageIds.map((id) => ({ id })) || [],
+      },
+      categories: {
+        connect: artwork.categories?.map(({ slug }) => ({ slug })) || [],
+      },
       importPublishedAt: new Date(artwork.importPublishedAt).toISOString(),
     };
-    delete data.content;
-    console.log('data', data);
+    delete createData.content;
+
+    const updateData = {
+      ...artwork,
+      images: {
+        connect: imageIds.map((id) => ({ where: { id } })) || [],
+      },
+      categories: {
+        connect: artwork.categories?.map(({ slug }) => ({ where: { slug } })) || [],
+      },
+      importPublishedAt: new Date(artwork.importPublishedAt).toISOString(),
+    };
+    delete updateData.content;
+
+    console.log('createData', createData);
+    console.log('updateData', updateData);
 
     const variables = {
       slug: artwork.slug,
-      createData: data,
-      updateData: data,
+      createData,
+      updateData,
     };
     const respones = await graphcms.request(upsertQuery, variables);
     console.log(JSON.stringify(respones, undefined, 2));
