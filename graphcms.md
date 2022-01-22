@@ -21,7 +21,7 @@
 * id: string! (id, required, unique, system field)
 * slug: string! (slug, required, unique)
 * title: string! (single line, required)
-* content: string (multi line, markdown, required)
+* content: string! (multi line, markdown, required)
 * sortIndex: number! (integer, required)
 
 ## Artwork (ordered by wpPublishedAt)
