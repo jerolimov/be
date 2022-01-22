@@ -15,14 +15,13 @@ if (!existsSync('pages')) {
 
 wpPages.forEach((wpPage) => {
   // console.log('wpPage', wpPage);
+  const slug = wpPage['wp:post_name'];
+  const title = wpPage.title;
+  const content = wpPage['content:encoded'];
+  const sortIndex = wpPage['wp:post_id'];
+
   const filename = 'pages/' + wpPage['wp:post_name'] + '.json';
-  const page = {
-    slug: wpPage['wp:post_name'],
-    title: wpPage.title,
-    content: wpPage['content:encoded'] || wpPage.description,
-    publishDate: wpPage.pubDate,
-    postDate: wpPage['wp:post_date'],
-  };
+  const page = { slug, title, content, sortIndex };
   // console.log('page', page);
   writeFileSync(filename, JSON.stringify(page, null, 2));
 });

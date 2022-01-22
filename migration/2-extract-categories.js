@@ -13,10 +13,13 @@ if (!existsSync('categories')) {
 }
 
 wpCategories.forEach((wpCategory) => {
+  // console.log('wpCategory', wpCategory);
   const slug = wpCategory['wp:category_nicename'];
   const title = wpCategory['wp:cat_name'];
+  const sortIndex = wpCategory['wp:term_id'];
 
-  const category = { slug, title };
   const filename = 'categories/' + slug + '.json';
+  const category = { slug, title, sortIndex };
+  // console.log('category', category);
   writeFileSync(filename, JSON.stringify(category, null, 2));
 });
