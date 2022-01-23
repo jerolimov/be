@@ -2,20 +2,20 @@ import { LoaderFunction, MetaFunction, useLoaderData } from "remix";
 import { gql } from "graphql-request";
 import { marked } from "marked";
 import { graphcms } from "~/data/graphql.server";
-import { Content } from "~/types/content";
+import { Page } from "~/types/pages";
 import { Artwork } from "~/types/artworks";
 import ArtworkDetailItem from "~/components/ArtworkDetailItem";
 import getTitle from "~/utils/getTitle";
 import ContentPage from "~/components/ContentPage";
 
 type QueryData = {
-  content?: Content;
+  page?: Page;
   artwork?: Artwork;
 };
 
 type LoaderData = {
-  type: 'content',
-  content: Content;
+  type: 'page',
+  page: Page;
 } | {
   type: 'artwork',
   artwork: Artwork;
@@ -23,7 +23,7 @@ type LoaderData = {
 
 const query = gql`
   query GetArtwork($slug: String!) {
-    content(where: { slug: $slug }) {
+    page(where: { slug: $slug }) {
       id
       slug
       title
@@ -33,7 +33,9 @@ const query = gql`
       id
       slug
       title
-      content
+      technique
+      material
+      size
       images {
         id
         url
@@ -43,12 +45,11 @@ const query = gql`
 `;
 
 export const loader: LoaderFunction = async ({ params }): Promise<LoaderData> => {
-  const { content, artwork } = await graphcms.request<QueryData>(query, { slug: params.slug });
-  if (content) {
-    content.content = marked(content.content || '');
-    return { type: 'content', content };
+  const { page, artwork } = await graphcms.request<QueryData>(query, { slug: params.slug });
+  if (page) {
+    page.content = marked(page.content || '');
+    return { type: 'page', page };
   } else if (artwork) {
-    artwork.content = marked(artwork.content);
     return { type: 'artwork', artwork };
   } else {
     throw new Response("Not Found", { status: 404 });
@@ -56,8 +57,8 @@ export const loader: LoaderFunction = async ({ params }): Promise<LoaderData> =>
 }
 
 export const meta: MetaFunction = ({ data }: { data: LoaderData }) => {
-  if (data.type === 'content') {
-    return { title: getTitle(data.content.title) };
+  if (data.type === 'page') {
+    return { title: getTitle(data.page.title) };
   } else if (data.type === 'artwork') {
     return { title: getTitle(data.artwork.title) };
   } else {
@@ -67,8 +68,8 @@ export const meta: MetaFunction = ({ data }: { data: LoaderData }) => {
 
 export default function CatchAll() {
   const data = useLoaderData<LoaderData>();
-  if (data.type === 'content') {
-    return <ContentPage content={data.content} />
+  if (data.type === 'page') {
+    return <ContentPage page={data.page} />
   } else if (data.type === 'artwork') {
     return <ArtworkDetailItem artwork={data.artwork} />
   } else {

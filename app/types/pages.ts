@@ -1,4 +1,4 @@
-export interface Content {
+export interface Page {
   id: number | string;
   slug: string;
   title: string;

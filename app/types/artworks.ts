@@ -9,8 +9,9 @@ export interface Artwork {
   id: number | string;
   slug: string;
   title: string;
-  /** Markdown */
-  content: string;
+  technique: string;
+  material: string;
+  size: string;
   images: ArtworkImage[];
   categories: Category[];
 }

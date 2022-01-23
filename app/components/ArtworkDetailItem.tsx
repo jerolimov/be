@@ -9,7 +9,9 @@ export default function ArtworkDetailItem({ artwork }: { artwork: Artwork }) {
         <img src={image.url} />
         </div>
       ))}
-      <div dangerouslySetInnerHTML={{ __html: artwork.content }} />
+      {artwork.technique ? <div>{artwork.technique}</div> : null}
+      {artwork.material ? <div>{artwork.material}</div> : null}
+      {artwork.size ? <div>{artwork.size}</div> : null}
     </div>
   );
 }

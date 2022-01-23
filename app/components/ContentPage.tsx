@@ -1,10 +1,10 @@
-import { Content } from "~/types/content";
+import { Page } from "~/types/pages";
 
-export default function ContentPage({ content }: { content: Content }) {
+export default function ContentPage({ page }: { page: Page }) {
   return (
     <div>
-      <h1>{content.title}</h1>
-      {content.content ? <div dangerouslySetInnerHTML={{ __html: content.content }} /> : null}
+      <h1>{page.title}</h1>
+      {page.content ? <div dangerouslySetInnerHTML={{ __html: page.content }} /> : null}
     </div>
   );
 }

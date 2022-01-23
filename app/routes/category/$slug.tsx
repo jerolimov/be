@@ -1,6 +1,5 @@
 import { LoaderFunction, MetaFunction, useLoaderData } from "remix";
 import { gql } from "graphql-request";
-import { marked } from "marked";
 import { graphcms } from "~/data/graphql.server";
 import { Category } from "~/types/categories";
 import getTitle from "~/utils/getTitle";
@@ -35,7 +34,9 @@ const query = gql`
         id
         slug
         title
-        content
+        technique
+        material
+        size
         images {
           id
           url(
@@ -58,9 +59,6 @@ const query = gql`
 
 export const loader: LoaderFunction = async ({ params }): Promise<LoaderData> => {
   const data = await graphcms.request<QueryData>(query, { slug: params.slug });
-  data.category.artworks?.forEach((artwork) => {
-    artwork.content = marked(artwork.content);
-  })
   return data;
 }
 
