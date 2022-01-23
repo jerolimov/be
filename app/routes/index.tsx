@@ -18,7 +18,7 @@ interface LoaderData {
 
 const query = gql`
 query {
-  categories {
+  categories(orderBy: title_ASC) {
     id
     slug
     title
@@ -26,7 +26,7 @@ query {
       id
     }
   }
-  artworks {
+  artworks(orderBy: sortIndex_DESC) {
     id
     slug
     title

@@ -30,7 +30,7 @@ const query = gql`
       id
       slug
       title
-      artworks {
+      artworks(orderBy: sortIndex_DESC) {
         id
         slug
         title
