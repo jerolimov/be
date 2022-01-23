@@ -5,3 +5,12 @@ node_modules
 /app/tailwind.css
 /build
 /public/build
+
+# Netlify
+/.netlify
+/netlify/functions/server/build
+
+# Vercel
+/.vercel
+/.output
+/api/_build
