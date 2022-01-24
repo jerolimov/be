@@ -2,6 +2,8 @@ import { Category } from "./categories";
 
 export interface ArtworkImage {
   id: string;
+  width: number;
+  height: number;
   url: string;
 }
 

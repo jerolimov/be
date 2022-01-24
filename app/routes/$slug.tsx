@@ -38,6 +38,8 @@ const query = gql`
       size
       images {
         id
+        width
+        height
         url(
           transformation: {
             image: {
