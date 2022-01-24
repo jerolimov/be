@@ -38,7 +38,17 @@ const query = gql`
       size
       images {
         id
-        url
+        url(
+          transformation: {
+            image: {
+              resize: {
+                width: 1000,
+                height: 1000,
+              }
+            }
+            validateOptions: true
+          }
+        )
       }
     }
   }
