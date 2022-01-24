@@ -11,7 +11,9 @@ export default function ArtworkListItem({ artworks }: { artworks: Artwork[] }) {
               <img
                 src={artwork.images[0].url}
                 alt=""
-                className="rounded-lg" />
+                loading="lazy"
+                className="rounded-lg"
+              />
               <h1 className="text-sm font-medium text-gray-900 truncate">{artwork.title}</h1>
             </Link>
           </li>

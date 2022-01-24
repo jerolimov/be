@@ -6,7 +6,11 @@ export default function ArtworkDetailItem({ artwork }: { artwork: Artwork }) {
       <h1>{artwork.title}</h1>
       {artwork.images?.map((image) => (
         <div key={image.id}>
-        <img src={image.url} />
+          <img
+            src={image.url}
+            alt=""
+            loading="lazy"
+          />
         </div>
       ))}
       {artwork.technique ? <div>{artwork.technique}</div> : null}
