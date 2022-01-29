@@ -17,7 +17,7 @@ query {
       importPublishedAt
     }
   }
-  artworks(orderBy: sortIndex_DESC) {
+  artworks(first 1000, orderBy: sortIndex_DESC) {
     id
     slug
     publishedAt
@@ -116,6 +116,9 @@ export const artworkToSitemapUrl = (baseURL: string, now = new Date()) => (artwo
 export const loader: LoaderFunction = async ({ request }): Promise<Response> => {
   const data = await graphcms.request<QueryData>(query);
   const baseURL = process.env.BASE_URL || request.url.substring(0, request.url.indexOf('/sitemap'));
+
+  console.log(`Create sitemap with ${data.categories.length} categories and ${data.artworks.length} artworks.`)
+
   const sitemap: Sitemap = {
     _declaration: {
       _attributes: {
