@@ -17,7 +17,7 @@ query {
       importPublishedAt
     }
   }
-  artworks(first 1000, orderBy: sortIndex_DESC) {
+  artworks(first: 1000, orderBy: sortIndex_DESC) {
     id
     slug
     publishedAt
