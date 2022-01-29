@@ -8,7 +8,7 @@ export interface ArtworkImage {
 }
 
 export interface Artwork {
-  id: number | string;
+  id: string;
   slug: string;
   title: string;
   technique: string;
@@ -16,4 +16,7 @@ export interface Artwork {
   size: string;
   images: ArtworkImage[];
   categories: Category[];
+  sortIndex: number;
+  publishedAt: Date;
+  importPublishedAt: Date;
 }
