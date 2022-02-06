@@ -11,6 +11,8 @@ import {
 } from "remix";
 import getTitle from "~/utils/getTitle";
 import styles from "~/tailwind.css";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 
 export const meta: MetaFunction = () => {
   return { title: getTitle() };
@@ -30,18 +32,11 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <header className="container mx-auto text-center py-8">
-          <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight">
-            <Link to="/">BE</Link>
-          </h1>
-        </header>
+        <Header />
         <main className="container mx-auto prose prose-slate prose-img:rounded-xl">
           <Outlet />
         </main>
-        <footer className="container mx-auto prose my-10 pt-5 text-center border-t">
-          Alle Bilder Urheberrechtlich geschützt.{' '}
-          <Link to="/impressum" prefetch="none">Impressum</Link>
-        </footer>
+        <Footer />
         <ScrollRestoration />
         <Scripts />
         {process.env.NODE_ENV === "development" && <LiveReload />}
