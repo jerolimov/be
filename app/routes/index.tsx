@@ -5,6 +5,8 @@ import ArtworkGrid from "~/components/ArtworkGrid";
 import CategoryDropdown from "~/components/CategoryDropdown";
 import { Artwork } from "~/types/artworks";
 import { Category } from "~/types/categories";
+import H2 from "~/components/H2";
+import React from "react";
 
 interface QueryData {
   categories: Category[];
@@ -64,6 +66,14 @@ export default function Index() {
   return (
     <div className="not-prose">
       <CategoryDropdown currentTitle="Alle Bilder" categories={data.categories} />
+      <H2>Neuste Kunstwerke</H2>
+      {
+        data.categories.map((category) => (
+          <React.Fragment key={category.id}>
+            <H2>{category.title}</H2>
+          </React.Fragment>
+        ))
+      }
       <ArtworkGrid artworks={data.artworks} />
     </div>
   );
