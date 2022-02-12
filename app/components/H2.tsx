@@ -1,4 +1,4 @@
-export default function H2({ className, ...otherProps }: React.ImgHTMLAttributes<HTMLHeadingElement>) {
+export default function H2({ className, ...otherProps }: React.HTMLAttributes<HTMLHeadingElement>) {
   return (
     <h2
       {...otherProps}

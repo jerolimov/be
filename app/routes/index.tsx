@@ -5,6 +5,7 @@ import ArtworkGrid from "~/components/ArtworkGrid";
 import CategoryDropdown from "~/components/CategoryDropdown";
 import { Artwork } from "~/types/artworks";
 import { Category } from "~/types/categories";
+import H1 from "~/components/H1";
 import H2 from "~/components/H2";
 import React from "react";
 
@@ -65,6 +66,7 @@ export default function Index() {
   const data = useLoaderData<LoaderData>();
   return (
     <div className="not-prose">
+      <H1>BE</H1>
       <CategoryDropdown currentTitle="Alle Bilder" categories={data.categories} />
       <H2>Neuste Kunstwerke</H2>
       {
